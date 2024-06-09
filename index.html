@@ -1,0 +1,258 @@
+<!--Lord Mendoza - G00841164-->
+<!--SWE 645 - HW1-->
+
+<!doctype html>
+
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <title>Student Survey Form</title>
+    <meta content="" name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <meta content="" property="og:title">
+    <meta content="" property="og:type">
+    <meta content="" property="og:url">
+    <meta content="" property="og:image">
+
+    <link href="css/main.css" rel="stylesheet">
+
+    <meta content="#fafafa" name="theme-color">
+
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!--  Adding jquery to help with displaying modal for asking user for their name-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <!--  Adding axios for AJAX call, and xmlToJSON to parse xml response from USPS zip code API -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xmltojson@1.3.5/lib/xmlToJSON.min.js"></script>
+
+</head>
+
+<body>
+
+<script src="js/main.js"></script>
+
+<div class="webpage survey">
+    <h4>Please fill in the following survey:</h4>
+
+    <div class="card" style="margin-bottom: 10px;">
+        <div class="card-body">
+            <h5 class="card-title">Movie Ticket Raffle</h5>
+            <p>Please input 10 comma-separated values below to see if you'll win the raffle! Each value must be between
+                1-100, inclusive.</p>
+
+            <div class="row align-items-start" id="dataAlert">
+                <div class="col">
+                    <div class="alert alert-danger" id="dataAlertMessage" role="alert"></div>
+                </div>
+            </div>
+
+            <div class="row align-items-start">
+                <div class="col">
+                    <form id="dataFormField" onsubmit="checkForWinningNumber(); return false;">
+                        <label class="form-label" for="dataValueField">Data:</label>
+                        <input autofocus class="form-control" id="dataValueField" name="dataValueField" placeholder="ex. [1,2, ..., 10]"
+                               required type="text">
+                    </form>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" onclick="resetData(); return false;" style="margin-top: 10px;"
+                    type="reset">Reset
+            </button>
+            <button class="btn btn-primary" onclick="checkForWinningNumber(); return false;" style="margin-top: 10px;"
+                    type="submit">Submit
+            </button>
+        </div>
+    </div>
+
+    <form autocomplete="on" id="surveyForm" onsubmit="validateSurveyData(); return false;">
+        <div class="card" style="margin-bottom: 10px;">
+            <div class="card-body">
+                <h5 class="card-title">Personal Information</h5>
+
+                <div class="row align-items-start">
+                    <div class="col">
+                        <label class="form-label" for="inputFirstName">First Name <span
+                                class="requiredSymbol">*</span></label>
+                        <input class="form-control" id="inputFirstName" name="name" placeholder="First Name" required
+                               type="text">
+                    </div>
+
+                    <div class="col">
+                        <label class="form-label" for="inputLastName">Last Name <span
+                                class="requiredSymbol">*</span></label>
+                        <input class="form-control" id="inputLastName" name="name" placeholder="Last Name" required
+                               type="text">
+                    </div>
+                </div>
+
+                <div class="row align-items-start">
+                    <div class="col">
+                        <label class="form-label" for="inputStreetAddress">Street Address <span
+                                class="requiredSymbol">*</span></label>
+                        <input class="form-control" id="inputStreetAddress" name="address" placeholder="Street Address"
+                               required
+                               type="text">
+                    </div>
+                </div>
+
+                <div class="row align-items-start">
+                    <div class="col">
+                        <label class="form-label" for="inputCityAddress">City <span
+                                class="requiredSymbol">*</span></label>
+                        <input class="form-control" id="inputCityAddress" name="city" placeholder="City" required
+                               type="text">
+                    </div>
+                    <div class="col">
+                        <label class="form-label" for="inputStateAddress">State <span
+                                class="requiredSymbol">*</span></label>
+                        <input class="form-control" id="inputStateAddress" name="state" placeholder="State" required
+                               type="text">
+                    </div>
+                    <div class="col">
+                        <label class="form-label" for="inputZipAddress">Zip <span
+                                class="requiredSymbol">*</span></label>
+                        <input autocomplete="off" class="form-control" id="inputZipAddress" name="zip" onblur="getCityStateFromZip();"
+                               placeholder="Zip"
+                               required
+                               type="text">
+                        <div class="invalid-feedback" id="invalidZip">
+                            Please provide a valid zip.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row align-items-start">
+                    <div class="col">
+                        <label class="form-label" for="inputTelephone">Telephone <span
+                                class="requiredSymbol">*</span></label>
+                        <input class="form-control" id="inputTelephone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                               placeholder="###-###-####"
+                               required type="tel">
+                    </div>
+
+                    <div class="col">
+                        <label class="form-label" for="inputEmail">Email <span class="requiredSymbol">*</span></label>
+                        <input class="form-control" id="inputEmail" name="email" placeholder="sample@email.com"
+                               required
+                               type="email">
+                    </div>
+                </div>
+
+                <div class="row align-items-start">
+                    <div class="col">
+                        <label class="form-label" for="inputDate">Date of Survey<span
+                                class="requiredSymbol">*</span></label>
+                        <input class="form-control" id="inputDate" name="todaysDate" required type="date">
+                    </div>
+                </div>
+
+                <hr/>
+                <h5 class="card-title">Feedback Questions</h5>
+
+                <label class="form-label">What did you like most about the campus?</label>
+
+                <div class="form-check">
+                    <label for="checkStud">Students</label>
+                    <input class="form-check-input" id="checkStud" type="checkbox" value="">
+                </div>
+
+                <div class="form-check">
+                    <label for="checkLoc">Location</label>
+                    <input class="form-check-input" id="checkLoc" type="checkbox" value="">
+                </div>
+
+                <div class="form-check">
+                    <label for="checkCamp">Campus</label>
+                    <input class="form-check-input" id="checkCamp" type="checkbox" value="">
+                </div>
+
+                <div class="form-check">
+                    <label for="checkAtm">Atmosphere</label>
+                    <input class="form-check-input" id="checkAtm" type="checkbox" value="">
+                </div>
+
+                <div class="form-check">
+                    <label for="checkDorm">Dorm Rooms</label>
+                    <input class="form-check-input" id="checkDorm" type="checkbox" value="">
+                </div>
+
+                <div class="form-check">
+                    <label for="checkSport">Sports</label>
+                    <input class="form-check-input" id="checkSport" type="checkbox" value="">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">How'd you became interested in the University?</label>
+
+                    <div class="form-check">
+                        <input class="form-check-input" id="flexFriend" name="flexInterest" type="radio">
+                        <label class="form-check-label" for="flexFriend">
+                            Friends
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" id="flexTel" name="flexInterest" type="radio">
+                        <label class="form-check-label" for="flexTel">
+                            Television
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" id="flexInt" name="flexInterest" type="radio">
+                        <label class="form-check-label" for="flexInt">
+                            Internet
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" id="flexOther" name="flexInterest" type="radio">
+                        <label class="form-check-label" for="flexOther">
+                            Other
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">How Likely Are You Recommend GMU?</label>
+                    <select class="form-select" name="recommendLikelihood">
+                        <option selected value="veryLikely">Very Likely</option>
+                        <option value="likely">Likely</option>
+                        <option value="unlikely">Unlikely</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="textAreaComment">What else would you like to say?</label>
+                    <textarea class="form-control" id="textAreaComment" name="moreFeedback" placeholder="Any feedback is important!"
+                              rows="3"></textarea>
+                </div>
+
+                <div class="row align-items-start" id="personalInfoAlert">
+                    <div class="col">
+                        <div class="alert alert-danger" id="personalInfoAlertMessage" role="alert"></div>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="resetSurveyForm()" style="margin-top: 10px;" type="reset">
+                    Cancel
+                </button>
+                <button class="btn btn-primary" onclick="validateSurveyData(); return false;" style="margin-top: 10px;"
+                        type="submit">Submit
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>
