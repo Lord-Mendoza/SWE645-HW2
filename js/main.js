@@ -1,6 +1,7 @@
 /*
 Lord Mendoza - G00841164
 SWE 645 - HW1
+This code is in charge of all scripts related to html page.
 */
 
 document.addEventListener("DOMContentLoaded", function () {
