@@ -58,37 +58,6 @@
 <div class="webpage survey">
     <h4>Please fill in the following survey:</h4>
 
-    <div class="card" style="margin-bottom: 10px;">
-        <div class="card-body">
-            <h5 class="card-title">Movie Ticket Raffle</h5>
-            <p>Please input 10 comma-separated values below to see if you'll win the raffle! Each value must be between
-                1-100, inclusive.</p>
-
-            <div class="row align-items-start" id="dataAlert">
-                <div class="col">
-                    <div class="alert alert-danger" id="dataAlertMessage" role="alert"></div>
-                </div>
-            </div>
-
-            <div class="row align-items-start">
-                <div class="col">
-                    <form id="dataFormField" onsubmit="checkForWinningNumber(); return false;">
-                        <label class="form-label" for="dataValueField">Data:</label>
-                        <input autofocus class="form-control" id="dataValueField" name="dataValueField" placeholder="ex. [1,2, ..., 10]"
-                               required type="text">
-                    </form>
-                </div>
-            </div>
-
-            <button class="btn btn-secondary" onclick="resetData(); return false;" style="margin-top: 10px;"
-                    type="reset">Reset
-            </button>
-            <button class="btn btn-primary" onclick="checkForWinningNumber(); return false;" style="margin-top: 10px;"
-                    type="submit">Submit
-            </button>
-        </div>
-    </div>
-
     <form autocomplete="on" id="surveyForm" onsubmit="validateSurveyData(); return false;">
         <div class="card" style="margin-bottom: 10px;">
             <div class="card-body">
@@ -245,6 +214,30 @@
                         <option value="likely">Likely</option>
                         <option value="unlikely">Unlikely</option>
                     </select>
+                </div>
+
+                <div class="card" style="margin-bottom: 10px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Movie Ticket Raffle</h5>
+                        <p>Please input 10 comma-separated values below to see if you'll win the raffle! Each value must be between
+                            1-100, inclusive.</p>
+
+                        <div class="row align-items-start" id="dataAlert">
+                            <div class="col">
+                                <div class="alert alert-danger" id="dataAlertMessage" role="alert"></div>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-start">
+                            <div class="col">
+                                <form id="dataFormField" onsubmit="checkForWinningNumber(); return false;">
+                                    <label class="form-label" for="dataValueField">Data:</label>
+                                    <input autofocus class="form-control" id="dataValueField" name="dataValueField" placeholder="ex. [1,2, ..., 10]"
+                                           required type="text">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mb-3">

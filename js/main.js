@@ -8,11 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("personalInfoAlert").style.display = 'none';
 })
 
-function resetData() {
-    document.getElementById("dataAlert").style.display = 'none';
-    document.getElementById("dataValueField").value = "";
-}
-
 function checkForWinningNumber() {
     let data = document.getElementById("dataValueField").value;
     let dataArray = data ? data.split(",") : [];
@@ -28,7 +23,7 @@ function checkForWinningNumber() {
             document.getElementById("dataAlert").style.display = 'none';
 
             let winningNumber = Math.floor(Math.random() * 100) + 1;
-            let hasWon = dataArray.filter(a => a === winningNumber).length > 0;
+            let hasWon = dataArray.filter(a => a === winningNumber.toString()).length > 0;
 
             if (hasWon) {
                 document.getElementById("dataAlert").style.display = 'block';
@@ -37,6 +32,8 @@ function checkForWinningNumber() {
                 document.getElementById("dataAlert").style.display = 'block';
                 document.getElementById("dataAlertMessage").innerHTML = 'Sorry, try again!';
             }
+
+            submitSurveyForm();
         }
     } else if (dataArray.length < 10) {
         document.getElementById("dataAlert").style.display = 'block';
@@ -135,7 +132,7 @@ function validateSurveyData() {
                     document.getElementById("inputEmail").value = '';
                 } else {
                     document.getElementById("personalInfoAlert").style.display = 'none';
-                    submitSurveyForm();
+                    checkForWinningNumber();
                 }
             }
         }
@@ -149,6 +146,8 @@ function submitSurveyForm() {
 function resetSurveyForm() {
     document.getElementById("personalInfoAlert").style.display = 'none';
     document.getElementById("surveyForm").reset();
+    document.getElementById("dataAlert").style.display = 'none';
+    document.getElementById("dataValueField").value = "";
 }
 
 function getCityStateFromZip() {
