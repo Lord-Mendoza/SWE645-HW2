@@ -46,3 +46,7 @@ h1 {
 .row {
     padding: 5px;
 }
+
+.container-fluid.mainNav {
+    background-color: #006633;
+}
