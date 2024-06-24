@@ -14,7 +14,7 @@ pipeline {
                 checkout scm
                 sh 'rm -rf *.war'
                 sh 'jar -cvf hw2.war *'
-                sh 'docker login -u "${DOCKER_USER_ID}" -p "${DOCKER_PASSWORD}"'
+                sh 'docker login --username "${DOCKER_USER_ID}" --password "${DOCKER_PASSWORD}" --password-stdin'
             }
         }
 
