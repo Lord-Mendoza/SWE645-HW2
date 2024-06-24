@@ -13,7 +13,7 @@ pipeline {
                 // Check out the code from your source repository
                 checkout scm
                 sh 'rm -rf *.war'
-                sh 'jar -cvf hw2.war -C WebContent/ .'
+                sh 'jar -cvf hw2.war *'
                 sh 'docker login -u "${DOCKER_USER_ID}" -p "${DOCKER_PASSWORD}"'
             }
         }
