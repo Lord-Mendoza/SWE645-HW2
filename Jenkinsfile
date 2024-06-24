@@ -1,5 +1,5 @@
 pipeline {
-
+    agent any
     environment {
         // Docker Hub credentials ID
         DOCKER_CREDENTIALS_ID = 'lordm'
