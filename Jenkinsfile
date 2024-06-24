@@ -39,14 +39,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            // Clean up Docker images to free up space
-            script {
-                def image = docker.image("${IMAGE_NAME}:${IMAGE_TAG}")
-                image.remove()
-            }
-        }
-    }
 }
