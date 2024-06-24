@@ -1,8 +1,4 @@
 pipeline {
-    agent {
-        // Use a Jenkins agent with Docker installed
-        label 'docker'
-    }
 
     environment {
         // Docker Hub credentials ID
