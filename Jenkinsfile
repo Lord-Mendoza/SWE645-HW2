@@ -21,7 +21,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_USER_ID}") {
+                    docker.withRegistry('https://index.docker.io/v1/', ${DOCKER_USER_ID}) {
                         def image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
                     }
                 }
@@ -31,7 +31,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_USER_ID}") {
+                    docker.withRegistry('https://index.docker.io/v1/', ${DOCKER_USER_ID}) {
                         def image = docker.image("${IMAGE_NAME}:${IMAGE_TAG}")
                         image.push()
                     }
