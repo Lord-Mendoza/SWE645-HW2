@@ -1,11 +1,9 @@
 pipeline {
     agent any
     environment {
-        // Docker Hub credentials ID
-        DOCKER_CREDENTIALS_ID = 'lordm'
-        // Docker image name
-        IMAGE_NAME = 'Lord-Mendoza/SWE645-HW2'
-        // Docker image tag
+        DOCKER_CREDENTIALS_ID = ${DOCKER_USER_ID}
+        DOCKER_CREDENTIALS_PASS = ${DOCKER_PASSWORD}
+        IMAGE_NAME = 'HW2'
         IMAGE_TAG = 'latest'
     }
 
@@ -13,15 +11,17 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Check out the code from your source repository
-                git 'https://github.com/Lord-Mendoza/SWE645-HW2.git'
+                checkout scm
+                sh 'rm -rf *.war'
+                sh 'jar -cvf hw2.war -C WebContent/ .'
+                sh "docker login -u ${DOCKER_USER_ID} -p ${DOCKER_PASSWORD}"
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
-                        // Build Docker image
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_USER_ID}") {
                         def image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
                     }
                 }
@@ -31,8 +31,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
-                        // Push the Docker image to the registry
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_USER_ID}") {
                         def image = docker.image("${IMAGE_NAME}:${IMAGE_TAG}")
                         image.push()
                     }
