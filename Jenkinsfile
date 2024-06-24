@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        DOCKER_CREDENTIALS_ID = ${DOCKER_USER_ID}
-        DOCKER_CREDENTIALS_PASS = ${DOCKER_PASSWORD}
+        DOCKER_CREDENTIALS_ID = "${DOCKER_USER_ID}"
+        DOCKER_CREDENTIALS_PASS = "${DOCKER_PASSWORD}"
         IMAGE_NAME = 'HW2'
         IMAGE_TAG = 'latest'
     }
@@ -14,7 +14,7 @@ pipeline {
                 checkout scm
                 sh 'rm -rf *.war'
                 sh 'jar -cvf hw2.war -C WebContent/ .'
-                sh "docker login -u ${DOCKER_USER_ID} -p ${DOCKER_PASSWORD}"
+                sh 'docker login -u "${DOCKER_USER_ID}" -p "${DOCKER_PASSWORD}"'
             }
         }
 
