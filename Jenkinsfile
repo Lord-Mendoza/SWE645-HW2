@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS_ID = credentials("DOCKER_USER_ID")
         DOCKER_CREDENTIALS_PASS = credentials("DOCKER_PASSWORD")
-        IMAGE_NAME = 'HW2'
+        IMAGE_NAME = 'hw2'
         IMAGE_TAG = 'latest'
     }
 
