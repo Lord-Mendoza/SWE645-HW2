@@ -39,6 +39,7 @@ pipeline {
             steps {
                 script {
                     sh """
+                        export KUBECONFIG="${KUBECONFIG}" && kubectl get nodes
                         kubectl set image deployment/hw2-deployment hw2-container="${DOCKER_CREDENTIALS_ID}"/"${IMAGE_NAME}":"${IMAGE_TAG}" -n default
                         kubectl rollout status deployment/hw2-deployment -n default
                     """
