@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS_ID = credentials("DOCKER_USER_ID")
         DOCKER_CREDENTIALS_PASS = credentials("DOCKER_PASSWORD")
+        KUBECONFIG = credentials("KUBECONFIG")
         IMAGE_NAME = 'hw2'
         IMAGE_TAG = 'latest'
     }
