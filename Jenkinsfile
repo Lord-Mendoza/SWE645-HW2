@@ -10,7 +10,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Check out the code from your source repository
                 checkout scm
                 sh 'rm -rf *.war'
                 sh 'jar -cvf hw2.war *'
@@ -20,7 +19,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Building Docker Image') {
             steps {
                 script {
                     docker.build("${DOCKER_CREDENTIALS_ID}/${IMAGE_NAME}:${IMAGE_TAG}")
@@ -28,10 +27,21 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
+        stage('Pushing Docker Image') {
             steps {
                 script {
                     docker.image("${DOCKER_CREDENTIALS_ID}/${IMAGE_NAME}:${IMAGE_TAG}").push()
+                }
+            }
+        }
+
+        stage("Deploying to Rancher") {
+            steps {
+                script {
+                    sh """
+                        kubectl set image deployment/hw2-deployment hw2-container="${DOCKER_CREDENTIALS_ID}"/"${IMAGE_NAME}":"${IMAGE_TAG}" -n default
+                        kubectl rollout status deployment/hw2-deployment -n default
+                    """
                 }
             }
         }
