@@ -1,3 +1,13 @@
+/*
+Lord Mendoza
+SWE 645 - HW2
+The following tells the Jenkins server to:
+1. Delete & build the project's war file
+2. Login to docker
+3. Build a new image & push it
+4. Tell Rancher to redeploy with the latest image.
+ */
+
 pipeline {
     agent any
     environment {
@@ -9,7 +19,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout, Build, & Login') {
             steps {
                 checkout scm
                 sh 'rm -rf *.war'
